@@ -4,12 +4,9 @@
  */
 package br.edu.ifpr.paranavai.armarios.visao;
 
-import java.awt.Container;
-import javax.swing.JButton;
-
 /**
  *
- * @author Aluno
+ * @author Ifpr
  */
 public class EditorLocalizacaoUI extends javax.swing.JFrame {
 
@@ -18,13 +15,6 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
      */
     public EditorLocalizacaoUI() {
         initComponents();
-        Container ct = this.getContentPane();
-        for (int i = 0; i < 10; i++) {
-            JButton btn = new JButton();
-            btn.setBounds(10, 10, 150, 40);
-            btn.setText(Integer.toString(i));
-            ct.add(btn);
-        }
     }
 
     /**
@@ -36,17 +26,36 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        painelSuperior = new javax.swing.JPanel();
+        painelInferior = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.FlowLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1);
+        javax.swing.GroupLayout painelSuperiorLayout = new javax.swing.GroupLayout(painelSuperior);
+        painelSuperior.setLayout(painelSuperiorLayout);
+        painelSuperiorLayout.setHorizontalGroup(
+            painelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        painelSuperiorLayout.setVerticalGroup(
+            painelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
 
-        jButton1.setText("jButton1");
-        getContentPane().add(jButton1);
+        getContentPane().add(painelSuperior, java.awt.BorderLayout.PAGE_START);
+
+        javax.swing.GroupLayout painelInferiorLayout = new javax.swing.GroupLayout(painelInferior);
+        painelInferior.setLayout(painelInferiorLayout);
+        painelInferiorLayout.setHorizontalGroup(
+            painelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        painelInferiorLayout.setVerticalGroup(
+            painelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(painelInferior, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -87,7 +96,7 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JPanel painelInferior;
+    private javax.swing.JPanel painelSuperior;
     // End of variables declaration//GEN-END:variables
 }
