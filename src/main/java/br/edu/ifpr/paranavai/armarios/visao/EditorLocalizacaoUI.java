@@ -28,6 +28,8 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
 
         painelSuperior = new javax.swing.JPanel();
         painelInferior = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,16 +46,37 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
 
         getContentPane().add(painelSuperior, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout painelInferiorLayout = new javax.swing.GroupLayout(painelInferior);
-        painelInferior.setLayout(painelInferiorLayout);
-        painelInferiorLayout.setHorizontalGroup(
-            painelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        painelInferiorLayout.setVerticalGroup(
-            painelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
+        painelInferior.setLayout(new java.awt.BorderLayout());
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Código", "Nome"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        painelInferior.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(painelInferior, java.awt.BorderLayout.CENTER);
 
@@ -96,6 +119,8 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JPanel painelInferior;
     private javax.swing.JPanel painelSuperior;
     // End of variables declaration//GEN-END:variables
