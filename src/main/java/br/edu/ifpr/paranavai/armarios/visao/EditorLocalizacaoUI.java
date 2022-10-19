@@ -4,17 +4,41 @@
  */
 package br.edu.ifpr.paranavai.armarios.visao;
 
+import br.edu.ifpr.paranavai.armarios.controle.LocalizacaoControle;
+import br.edu.ifpr.paranavai.armarios.modelo.Localizacao;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Ifpr
  */
 public class EditorLocalizacaoUI extends javax.swing.JFrame {
-
+    List<Localizacao> listaDeLocalizacoes;
     /**
      * Creates new form EditorLocalizacaoUI
      */
     public EditorLocalizacaoUI() {
         initComponents();
+        listaDeLocalizacoes = LocalizacaoControle.listarTodasLocalizacoes();
+        populaTabela(listaDeLocalizacoes);
+    }
+
+    private void populaTabela(List<Localizacao> lista) {
+        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) tblLocalizacao.getModel();
+        //  Primeiro limpa a tabela
+        while (modeloDeColunasDaTabela.getRowCount() != 0) {
+            modeloDeColunasDaTabela.removeRow(0);
+        }
+        
+        for (int i = 0; i < lista.size(); i++) {
+            Localizacao mostraLocalizacao = lista.get(i);
+            Object[] dadosLinha = new Object[2];
+            dadosLinha[0] = mostraLocalizacao.getLocalizacaoId();
+            dadosLinha[1] = mostraLocalizacao.getNome();
+            modeloDeColunasDaTabela.addRow(dadosLinha);
+        }
     }
 
     /**
@@ -27,56 +51,57 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
     private void initComponents() {
 
         painelSuperior = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        panelBusca = new javax.swing.JPanel();
+        lblNome = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        panelNovo = new javax.swing.JPanel();
+        btnNovo = new javax.swing.JButton();
         painelInferior = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblLocalizacao = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         painelSuperior.setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        panelBusca.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        panelBusca.setLayout(new javax.swing.BoxLayout(panelBusca, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel1.setText("Nome: ");
-        jPanel1.add(jLabel1);
+        lblNome.setText("Nome: ");
+        panelBusca.add(lblNome);
 
-        jTextField1.setSelectedTextColor(new java.awt.Color(204, 204, 204));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNome.setSelectedTextColor(new java.awt.Color(204, 204, 204));
+        txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtNomeActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1);
+        panelBusca.add(txtNome);
 
-        painelSuperior.add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        panelBusca.add(btnBuscar);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jPanel2.setLayout(new java.awt.GridLayout(1, 3, 10, 0));
+        painelSuperior.add(panelBusca, java.awt.BorderLayout.PAGE_START);
 
-        jButton1.setText("Salvar");
-        jPanel2.add(jButton1);
+        panelNovo.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panelNovo.setLayout(new java.awt.GridLayout(1, 3, 10, 0));
 
-        jButton3.setText("Alterar");
-        jPanel2.add(jButton3);
+        btnNovo.setText("Novo");
+        panelNovo.add(btnNovo);
 
-        jButton2.setText("Excluir");
-        jPanel2.add(jButton2);
-
-        painelSuperior.add(jPanel2, java.awt.BorderLayout.CENTER);
+        painelSuperior.add(panelNovo, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(painelSuperior, java.awt.BorderLayout.PAGE_START);
 
         painelInferior.setLayout(new java.awt.BorderLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblLocalizacao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -102,7 +127,7 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblLocalizacao);
 
         painelInferior.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -111,9 +136,20 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtNomeActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        ArrayList<Localizacao> filtrado = new ArrayList<Localizacao>();
+        
+        for (Localizacao localizacao : listaDeLocalizacoes) {
+            if(localizacao.getNome().contains(txtNome.getText()))
+                filtrado.add(localizacao);
+        }
+        
+        populaTabela(filtrado);
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,16 +187,15 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblNome;
     private javax.swing.JPanel painelInferior;
     private javax.swing.JPanel painelSuperior;
+    private javax.swing.JPanel panelBusca;
+    private javax.swing.JPanel panelNovo;
+    private javax.swing.JTable tblLocalizacao;
+    private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }
