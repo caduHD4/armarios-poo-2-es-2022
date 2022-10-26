@@ -6,7 +6,9 @@ package br.edu.ifpr.paranavai.armarios.visao;
 
 import br.edu.ifpr.paranavai.armarios.conexao.Conexao;
 import br.edu.ifpr.paranavai.armarios.controle.LocalizacaoControle;
+import br.edu.ifpr.paranavai.armarios.controle.EstudanteControle;
 import br.edu.ifpr.paranavai.armarios.modelo.Localizacao;
+import br.edu.ifpr.paranavai.armarios.modelo.Estudante;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -17,17 +19,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Aluno
  */
-public class ExemploLocalizacaoAula extends javax.swing.JFrame {
+public class ExemploEstudanteAula extends javax.swing.JFrame {
 
-    private List<Localizacao> listaLocalizacao;
+    private List<Estudante> listaEstudante;
     /**
      * Creates new form ExemploLocalizacaoAula
      */
-    public ExemploLocalizacaoAula() {
+    public ExemploEstudanteAula() {
         initComponents();
-        this.listaLocalizacao = LocalizacaoControle.listarTodasLocalizacoes();
-//        populaTabela();
-        populaCorreto(this.listaLocalizacao);
+        this.listaEstudante = EstudanteControle.listarTodasEstudantes();
+        populaCorreto(this.listaEstudante);
     }
 
     /**
@@ -150,20 +151,20 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Código", "Nome"
+                "Código", "Nome", "Email", "Telefone"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -192,10 +193,14 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFiltroActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        List<Localizacao> listaAtualizada = new ArrayList<>();
-        for(int i = 0; i < this.listaLocalizacao.size(); i++) {
-            if(this.listaLocalizacao.get(i).getNome().contains(txtFiltro.getText())) {
-                listaAtualizada.add(this.listaLocalizacao.get(i));
+        List<Estudante> listaAtualizada = new ArrayList<>();
+        for(int i = 0; i < this.listaEstudante.size(); i++) {
+            if(this.listaEstudante.get(i).getNome().contains(txtFiltro.getText())) {
+                listaAtualizada.add(this.listaEstudante.get(i));
+            } else if(this.listaEstudante.get(i).getTelefone().contains(txtFiltro.getText())) {
+                listaAtualizada.add(this.listaEstudante.get(i));
+            } else if(this.listaEstudante.get(i).getEmail().contains(txtFiltro.getText())) {
+                listaAtualizada.add(this.listaEstudante.get(i));
             }
         }
         this.populaCorreto(listaAtualizada);
@@ -218,20 +223,23 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ExemploLocalizacaoAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploEstudanteAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ExemploLocalizacaoAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploEstudanteAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ExemploLocalizacaoAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploEstudanteAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ExemploLocalizacaoAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploEstudanteAula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ExemploLocalizacaoAula().setVisible(true);
+                new ExemploEstudanteAula().setVisible(true);
             }
         });
     }
@@ -251,41 +259,19 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
     private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 
-    private void populaTabela() {
-        List<Localizacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM tb_localizacao";
-
-        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) jTable1.getModel();
-        
-        while (modeloDeColunasDaTabela.getRowCount() != 0) {
-            modeloDeColunasDaTabela.removeRow(0);
-        }
-            
-        try {
-            PreparedStatement preparedStatement = Conexao.getConexao().prepareStatement(sql);
-            ResultSet resultado = preparedStatement.executeQuery();
-            while(resultado.next()) {
-                Object[] dadosLinha = new Object[4];
-                dadosLinha[0] = resultado.getInt("id_localizacao");
-                dadosLinha[1] = resultado.getString("nome");
-                modeloDeColunasDaTabela.addRow(dadosLinha);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void populaCorreto(List<Localizacao> listaLocalizacao) {
+    private void populaCorreto(List<Estudante> listaEstudante) {
         DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) jTable1.getModel();
         
         while (modeloDeColunasDaTabela.getRowCount() != 0) {
             modeloDeColunasDaTabela.removeRow(0);
         }
         
-        for (Localizacao localizacao : listaLocalizacao) {
+        for (Estudante estudante : listaEstudante) {
             Object[] dadosLinha = new Object[4];
-            dadosLinha[0] = localizacao.getLocalizacaoId();
-            dadosLinha[1] = localizacao.getNome();
+            dadosLinha[0] = estudante.getPessoaId();
+            dadosLinha[1] = estudante.getNome();
+            dadosLinha[2] = estudante.getEmail();
+            dadosLinha[3] = estudante.getTelefone();
             modeloDeColunasDaTabela.addRow(dadosLinha);
         }
     }
