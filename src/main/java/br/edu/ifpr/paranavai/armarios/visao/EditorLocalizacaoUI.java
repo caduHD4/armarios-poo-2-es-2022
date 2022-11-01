@@ -57,6 +57,8 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         panelNovo = new javax.swing.JPanel();
         btnNovo = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
         painelInferior = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocalizacao = new javax.swing.JTable();
@@ -94,6 +96,12 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
 
         btnNovo.setText("Novo");
         panelNovo.add(btnNovo);
+
+        btnEditar.setText("Editar");
+        panelNovo.add(btnEditar);
+
+        btnExcluir.setText("Excluir");
+        panelNovo.add(btnExcluir);
 
         painelSuperior.add(panelNovo, java.awt.BorderLayout.CENTER);
 
@@ -144,7 +152,7 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         ArrayList<Localizacao> filtrado = new ArrayList<Localizacao>();
         
         for (Localizacao localizacao : listaDeLocalizacoes) {
-            if(localizacao.getNome().contains(txtNome.getText()))
+            if(localizacao.getNome().toUpperCase().contains(txtNome.getText().toUpperCase()))
                 filtrado.add(localizacao);
         }
         
@@ -188,6 +196,8 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNome;

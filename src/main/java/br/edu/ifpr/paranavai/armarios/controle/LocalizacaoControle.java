@@ -8,4 +8,8 @@ public class LocalizacaoControle {
     public static List<Localizacao> listarTodasLocalizacoes(){
         return LocalizacaoServico.buscarTodos();
     }
+
+    public static Localizacao salvar(Localizacao localizacao) {
+        return LocalizacaoServico.inserir(localizacao);
+    }
 }
