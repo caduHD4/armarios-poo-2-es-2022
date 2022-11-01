@@ -8,6 +8,7 @@ import br.edu.ifpr.paranavai.armarios.controle.LocalizacaoControle;
 import br.edu.ifpr.paranavai.armarios.modelo.Localizacao;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +22,8 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
      */
     public EditorLocalizacaoUI() {
         initComponents();
+           
+        this.setLocationRelativeTo(null);
         listaDeLocalizacoes = LocalizacaoControle.listarTodasLocalizacoes();
         populaTabela(listaDeLocalizacoes);
     }
@@ -63,7 +66,7 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocalizacao = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         painelSuperior.setLayout(new java.awt.BorderLayout());
 
@@ -95,12 +98,27 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         panelNovo.setLayout(new java.awt.GridLayout(1, 3, 10, 0));
 
         btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
         panelNovo.add(btnNovo);
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         panelNovo.add(btnEditar);
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
         panelNovo.add(btnExcluir);
 
         painelSuperior.add(panelNovo, java.awt.BorderLayout.CENTER);
@@ -158,6 +176,52 @@ public class EditorLocalizacaoUI extends javax.swing.JFrame {
         
         populaTabela(filtrado);
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        FormLocalizacaoUI form = new FormLocalizacaoUI();
+        this.setVisible(false);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (tblLocalizacao.getSelectedRow() >= 0) {
+            int dadosLinha = tblLocalizacao.getSelectedRow();
+            int codigo = (int) tblLocalizacao.getModel().getValueAt(dadosLinha, 0);
+            FormLocalizacaoUI form = new FormLocalizacaoUI(codigo);
+            this.setVisible(false);            
+            form.setLocationRelativeTo(this);
+            form.setVisible(true);
+            dispose();
+        }else {
+            JOptionPane.showMessageDialog(null, "Selecione uma Localização!");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if (tblLocalizacao.getSelectedRow() >= 0) {
+            int resposta = JOptionPane.showConfirmDialog(null, "Confirma a exclusão da Localização?", "Excluir Localização!", JOptionPane.YES_NO_OPTION);
+
+            if (resposta == 0) {
+                int dadosLinha = tblLocalizacao.getSelectedRow();
+                int codigo = (int) tblLocalizacao.getModel().getValueAt(dadosLinha, 0);
+
+                for (Localizacao localizacao : this.listaDeLocalizacoes) {
+                    if(localizacao.getLocalizacaoId() == codigo)
+                        LocalizacaoControle.excluir(localizacao);
+                }
+                
+                this.listaDeLocalizacoes = LocalizacaoControle.listarTodasLocalizacoes();
+               
+                populaTabela(this.listaDeLocalizacoes);
+
+                JOptionPane.showMessageDialog(null, "Localização Removida!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma Localização!");
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments

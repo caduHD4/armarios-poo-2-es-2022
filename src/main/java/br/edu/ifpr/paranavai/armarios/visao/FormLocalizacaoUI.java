@@ -6,7 +6,6 @@ package br.edu.ifpr.paranavai.armarios.visao;
 
 import br.edu.ifpr.paranavai.armarios.controle.LocalizacaoControle;
 import br.edu.ifpr.paranavai.armarios.modelo.Localizacao;
-import java.awt.TrayIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,14 +13,22 @@ import javax.swing.JOptionPane;
  * @author teren
  */
 public class FormLocalizacaoUI extends javax.swing.JFrame {
-    private boolean insercao;
+
+    private Localizacao localizacao;
 
     /**
      * Creates new form FormLocalizacaoUI
      */
     public FormLocalizacaoUI() {
         initComponents();
-        this.insercao = true;
+        this.localizacao = new Localizacao();
+    }
+
+    public FormLocalizacaoUI(int codigo) {
+        initComponents();
+        this.localizacao = LocalizacaoControle.buscarPorId(codigo);
+        panelFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados da Localização " + this.localizacao.getLocalizacaoId()));
+        txtNome.setText(this.localizacao.getNome());
     }
 
     /**
@@ -39,7 +46,7 @@ public class FormLocalizacaoUI extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
 
         panelFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados da Localização"));
@@ -55,6 +62,11 @@ public class FormLocalizacaoUI extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFormularioLayout = new javax.swing.GroupLayout(panelFormulario);
         panelFormulario.setLayout(panelFormularioLayout);
@@ -102,21 +114,38 @@ public class FormLocalizacaoUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(insercao){
-            try{
-            Localizacao localizacao = new Localizacao();
-            localizacao.setNome(txtNome.getText());
-            localizacao = LocalizacaoControle.salvar(localizacao);
-            JOptionPane.showMessageDialog(this, "Localização Salva com Sucesso!!!");
-            } catch (Exception e ){
+        if (this.localizacao.getLocalizacaoId() == null) {
+            try {
+                this.localizacao.setNome(txtNome.getText());
+                this.localizacao = LocalizacaoControle.inserir(this.localizacao);
+                JOptionPane.showMessageDialog(this, "Localização Salva com Sucesso!!!");
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Algo de Errado Aconteceu!!!");
                 e.printStackTrace();
-            } 
-        }        
+            }
+            
+        }else {            
+            try {
+                this.localizacao.setNome(txtNome.getText());
+                this.localizacao = LocalizacaoControle.atualizar(this.localizacao);
+                JOptionPane.showMessageDialog(this, "Alterações salvas com Sucesso!!!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Algo de Errado Aconteceu!!!");
+                e.printStackTrace();
+            }
+        }
         this.setVisible(false);
-        EditorLocalizacaoUI  editorLocalizacaoUI  = new EditorLocalizacaoUI();
+        EditorLocalizacaoUI editorLocalizacaoUI = new EditorLocalizacaoUI();
+        editorLocalizacaoUI.setLocationRelativeTo(null);
         editorLocalizacaoUI.setVisible(true);
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.setVisible(false);
+        EditorLocalizacaoUI editorLocalizacaoUI = new EditorLocalizacaoUI();
+        editorLocalizacaoUI.setLocationRelativeTo(null);
+        editorLocalizacaoUI.setVisible(true);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
