@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,8 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Aluno
  */
 public class ExemploLocalizacaoAula extends javax.swing.JFrame {
-
+    
     private List<Localizacao> listaLocalizacao;
+
     /**
      * Creates new form ExemploLocalizacaoAula
      */
@@ -48,9 +50,12 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
         txtFiltro = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
+        btnNovo = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
         painelInferior = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblLocalizacao = new javax.swing.JTable();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,15 +135,49 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
 
         painelSuperior.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
+        btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+
+        btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnNovo)
+                .addGap(56, 56, 56)
+                .addComponent(btnAlterar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                .addComponent(btnExcluir)
+                .addGap(32, 32, 32))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 45, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNovo)
+                    .addComponent(btnAlterar)
+                    .addComponent(btnExcluir))
+                .addContainerGap())
         );
 
         painelSuperior.add(jPanel5, java.awt.BorderLayout.CENTER);
@@ -147,8 +186,8 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
 
         painelInferior.setLayout(new java.awt.BorderLayout());
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblLocalizacao.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tblLocalizacao.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -174,10 +213,10 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane1.setViewportView(tblLocalizacao);
+        if (tblLocalizacao.getColumnModel().getColumnCount() > 0) {
+            tblLocalizacao.getColumnModel().getColumn(0).setResizable(false);
+            tblLocalizacao.getColumnModel().getColumn(1).setResizable(false);
         }
 
         painelInferior.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -193,13 +232,55 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Localizacao> listaAtualizada = new ArrayList<>();
-        for(int i = 0; i < this.listaLocalizacao.size(); i++) {
-            if(this.listaLocalizacao.get(i).getNome().contains(txtFiltro.getText())) {
+        for (int i = 0; i < this.listaLocalizacao.size(); i++) {
+            if (this.listaLocalizacao.get(i).getNome().contains(txtFiltro.getText())) {
                 listaAtualizada.add(this.listaLocalizacao.get(i));
             }
         }
         this.populaCorreto(listaAtualizada);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        if (tblLocalizacao.getSelectedRow() >= 0) {
+            int dadosLinha = tblLocalizacao.getSelectedRow();
+            int codigo = (int) tblLocalizacao.getModel().getValueAt(dadosLinha, 0);
+            
+            for (Localizacao localizacao : this.listaLocalizacao) {
+                if(localizacao.getLocalizacaoId() == codigo)
+                    LocalizacaoControle.excluir(localizacao);
+            }
+            
+            this.listaLocalizacao = LocalizacaoControle.listarTodasLocalizacoes();
+            populaCorreto(listaLocalizacao);
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        if (tblLocalizacao.getSelectedRow() >= 0) {
+            int dadosLinha = tblLocalizacao.getSelectedRow();
+            int codigo = (int) tblLocalizacao.getModel().getValueAt(dadosLinha, 0);
+            
+            for (Localizacao localizacao : this.listaLocalizacao) {
+                if(localizacao.getLocalizacaoId() == codigo){
+                    // abrir um formulário para alteracao
+                    FormularioLocalizacao form = new FormularioLocalizacao(localizacao);
+                    form.setVisible(true);
+                    this.setVisible(false);
+                    this.dispose();
+                }
+            }
+            
+            this.listaLocalizacao = LocalizacaoControle.listarTodasLocalizacoes();
+            populaCorreto(listaLocalizacao);
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        FormularioLocalizacao form = new FormularioLocalizacao();
+        form.setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btnNovoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,6 +318,9 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -245,38 +329,38 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel painelInferior;
     private javax.swing.JPanel painelSuperior;
+    private javax.swing.JTable tblLocalizacao;
     private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 
     private void populaTabela() {
         List<Localizacao> lista = new ArrayList<>();
         String sql = "SELECT * FROM tb_localizacao";
-
-        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) jTable1.getModel();
+        
+        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) tblLocalizacao.getModel();
         
         while (modeloDeColunasDaTabela.getRowCount() != 0) {
             modeloDeColunasDaTabela.removeRow(0);
         }
-            
+        
         try {
             PreparedStatement preparedStatement = Conexao.getConexao().prepareStatement(sql);
             ResultSet resultado = preparedStatement.executeQuery();
-            while(resultado.next()) {
+            while (resultado.next()) {
                 Object[] dadosLinha = new Object[4];
                 dadosLinha[0] = resultado.getInt("id_localizacao");
                 dadosLinha[1] = resultado.getString("nome");
                 modeloDeColunasDaTabela.addRow(dadosLinha);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     private void populaCorreto(List<Localizacao> listaLocalizacao) {
-        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel modeloDeColunasDaTabela = (DefaultTableModel) tblLocalizacao.getModel();
         
         while (modeloDeColunasDaTabela.getRowCount() != 0) {
             modeloDeColunasDaTabela.removeRow(0);
@@ -289,6 +373,5 @@ public class ExemploLocalizacaoAula extends javax.swing.JFrame {
             modeloDeColunasDaTabela.addRow(dadosLinha);
         }
     }
-    
     
 }
